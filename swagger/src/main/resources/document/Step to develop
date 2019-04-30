@@ -17,4 +17,103 @@ Step 2 : add following 2 dependency
 		</dependency>
 
 
-Step 3  :
+Step 3  :Create Controller for rest api
+
+step 4  : Add config java  class
+
+
+@Configuration
+@EnableSwagger2
+public class SwaggerConfig {
+
+    public Docket productApi(){
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.rkTech.swagger"))
+                .paths(regex("/rest.*"))
+                .build();
+    }
+}
+
+
+step 5 :run project and check for url
+http://localhost:9000/swagger-ui.html
+
+----------------------------------------------------------------------------------------------------
+Customized configuration
+
+
+
+Step 6 : Change method productApi in SwaggerConfig class
+
+ public Docket productApi(){
+        System.out.println("SwaggerConfig--->>productApi");
+
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.rkTech.swagger"))
+                .paths(regex("/rest.*"))
+                .build()
+                .apiInfo(metaInfo());
+    }
+
+    private ApiInfo metaInfo() {
+        System.out.println("SwaggerConfig--->>metaInfo");
+        ApiInfo apiInfo=new ApiInfo(
+                "Spring Boot Swagger Example Api",
+                "Spring Boot Swagger Example for ASPL",
+                "1.0",
+                "Terms of service",
+                new Contact("sunrichtechnology","http://localhost:9000/swagger-ui.html#!/user-resouce/getUserUsingGET","user10@sunrichtech.com"),
+                "Apache License Version 2.0",
+                "https://www.apache.org/licesen.html"
+        );
+        return apiInfo;
+    }
+
+
+
+ --------------------------------------------------------------------------------------------------------------------
+ Step 7 : Since Api returns the method name but some time it is not understandable. so we can over write the method
+    @ApiOperation(value = "Returns Hello World")
+----------------------------------------------------------------------------------------------------------------------
+Step 8 :We can overide response message as well by annotation on class level as well as method level
+
+On method level------------------>
+
+ @ApiOperation(value = "Returns Hello World")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 100,message = "100 is the message"),
+                    @ApiResponse(code = 200,message = "Successfull hello world")
+            }
+    )
+    @GetMapping
+    public String hello(){
+        return "Hello World";
+    }
+
+
+
+ on class level------------------> @Api(value="")
+@RestController
+@RequestMapping("/rest/user")
+@Api(value = "User Resource End Point")
+public class UserResouce {
+
+
+also we can write description in @Api(value="",description="")
+
+
+
+
+
+----------------------------------------------------------------------------------------------------
+Step 9 : Adding documentation to the model level---using @ApiModelProperty(notes = "")
+  @ApiModelProperty(notes = "name of the user")
+        private String userName;
+
+
+
+----------------------------------------------------------------------------------------------------
+

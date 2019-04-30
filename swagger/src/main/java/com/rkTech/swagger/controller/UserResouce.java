@@ -1,5 +1,7 @@
 package com.rkTech.swagger.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/rest/user")
+@Api(value = "User Resource End Point",description = "Shows user info")
 public class UserResouce {
 
     @GetMapping
@@ -29,7 +32,9 @@ public class UserResouce {
 
 
     private class User {
+        @ApiModelProperty(notes = "name of the user")
         private String userName;
+        @ApiModelProperty(notes = "salary of the user",required = true)
         private Long salary;
 
         public User(String userName, Long salary) {
